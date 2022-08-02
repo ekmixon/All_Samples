@@ -1,5 +1,5 @@
 import requests
-import pandas as pd 
+import pandas as pd
 import json
 import gzip
 import time
@@ -41,8 +41,9 @@ RiskMeter = sys.argv[2]
 
 # Created to validate if the vuln score changed during the last 24 hours or more (you can custom it)
 num_days = int(sys.argv[3])
-start_time = datetime.today()
-yesterday_datetime = (datetime.today() - timedelta(num_days)).strftime('%Y-%m-%d %H:%M:%S+00:00')
+start_time = datetime.now()
+yesterday_datetime = (
+    datetime.now() - timedelta(num_days)).strftime('%Y-%m-%d %H:%M:%S+00:00')
 
 # Used to bulk update the CVE's due dates
 base_uri3 = 'vulnerabilities/bulk'
@@ -60,21 +61,21 @@ cve_check = 0
 
 # Function to bulk update the CVE IDs and add the needed comments
 def bulk_func(d_id,d_cve_id, d_url, d_headers, d_num_days, d_list2, d_start_time):
-    print("....")
-    print("==========================================================================================================")
-    print("Removing the due_date from the needed vulnerabilities.")
-    
-    if d_id == 1:
-        data2 = '{ "vulnerability_ids" : ' + str(d_cve_id) + ', "vulnerability" : { "due_date": "" } }'
-    elif d_id == 2:
-        data2 = '{ "vulnerability_ids" : [' + str(d_cve_id) + '], "vulnerability" : { "due_date": "" } }'
+        print("....")
+        print("==========================================================================================================")
+        print("Removing the due_date from the needed vulnerabilities.")
 
-    return_data = requests.put(d_url, headers=d_headers, data=data2)
-    print("....")
-    print("URL3:     " + d_url)
-    print("Data:     " + data2)
-    print("Response: " + str(return_data))
-    print("....")
+        if d_id == 1:
+            data2 = '{ "vulnerability_ids" : ' + str(d_cve_id) + ', "vulnerability" : { "due_date": "" } }'
+        elif d_id == 2:
+            data2 = '{ "vulnerability_ids" : [' + str(d_cve_id) + '], "vulnerability" : { "due_date": "" } }'
+
+        return_data = requests.put(d_url, headers=d_headers, data=data2)
+        print("....")
+        print("URL3:     " + d_url)
+        print("Data:     " + data2)
+        print(f"Response: {str(return_data)}")
+        print("....")
 
 # Setup Data Dump
 headers = {

@@ -99,7 +99,6 @@ try:
         # get cwe/wasc
         the_cwe_id = query['cweid']
         the_wasc_id = CWE_WAS_DICT[the_cwe_id]
-    
     # iterate through result nodes
         for result in query.find_all('result'):
             the_filename = str(result['filename'])
@@ -115,12 +114,13 @@ try:
                     the_locator = the_filename + LOCATOR_DELIMITER + the_line + LOCATOR_DELIMITER + the_column
                     vuln_json = {
                         "vulnerability": {
-                            "wasc_id" : "WASC-" + the_wasc_id,
-                            "primary_locator" : "file",
-                            "file" : the_locator,
-                            "notes" : "Detected in " + the_filename + ", line " + the_line + ", column " + the_column + ": " + the_snippet
+                            "wasc_id": f"WASC-{the_wasc_id}",
+                            "primary_locator": "file",
+                            "file": the_locator,
+                            "notes": f"Detected in {the_filename}, line {the_line}, column {the_column}: {the_snippet}",
                         }
                     }
+
 
                     # POST new vuln/asset, get back asset_id
                     vuln_post = requests.post(API_ENDPOINT_VULNS, data=json.dumps(vuln_json), headers=headers)

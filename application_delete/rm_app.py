@@ -13,10 +13,10 @@ def print_json(json_obj):
 def delete_app(base_url, headers, app_id):
     print(f"Deleting application ID: {app_id}")
 
-    app_del_url = base_url + "applications/" + app_id
+    app_del_url = f"{base_url}applications/{app_id}"
     response = requests.delete(app_del_url, headers=headers)
     if response.status_code != 200:
-        print("Delete Appliacation Error: " + str(response.status_code))
+        print(f"Delete Appliacation Error: {str(response.status_code)}")
         sys.exit(1)
     resp_json = response.json()
     print_json(resp_json)
@@ -28,7 +28,7 @@ if __name__ == "__main__":
        print("If the first argument is a number, it is assumed that the command line ")
        print("arguments are app IDs.")
        sys.exit(1)
-   
+
     # KENNA_API_KEY is an environment variable.
     api_key = os.getenv('KENNA_API_KEY')
     if api_key is None:
@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     # Might have to change this depending on your server.
     base_url = "https://api.kennasecurity.com/"
-   
+
     # HTTP header.
     headers = {'Accept': 'application/json',
               'X-Risk-Token': api_key,

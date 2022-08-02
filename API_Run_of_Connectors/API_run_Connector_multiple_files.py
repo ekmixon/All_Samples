@@ -22,16 +22,16 @@ for filename in os.listdir(folder):
         abspath = os.path.abspath(pathname)
         try:
 
-            conn_url = API_ENDPOINT_CONNECTOR + "/" + connector_id + "/data_file?run=true"
+            conn_url = f"{API_ENDPOINT_CONNECTOR}/{connector_id}/data_file?run=true"
 
-            print conn_url
+            conn_url = API_ENDPOINT_CONNECTOR + "/" + connector_id + "/data_file?run=true"
 
             c = pycurl.Curl()
             c.setopt(c.URL, conn_url)
             c.setopt(c.POST, 1)
             c.setopt(c.HTTPPOST, [("file", (c.FORM_FILE, abspath))])
             c.setopt(pycurl.HTTPHEADER, ['content-type:application/json'])
-            c.setopt(pycurl.HTTPHEADER, ['X-Risk-Token:'+token])
+            c.setopt(pycurl.HTTPHEADER, [f'X-Risk-Token:{token}'])
             c.setopt(c.VERBOSE, 0)
             c.perform()
             c.close()
@@ -41,10 +41,13 @@ for filename in os.listdir(folder):
             while running:
 
                 time.sleep(15)
-                vuln_post = requests.get(API_ENDPOINT_CONNECTOR + "/" + connector_id, headers=headers)
+                vuln_post = requests.get(
+                    f"{API_ENDPOINT_CONNECTOR}/{connector_id}", headers=headers
+                )
+
                 #print vuln_post.status_code
                 response = vuln_post.json()
-                print response
+                time.sleep(15)
                 running = response['connector']['running']
 
 
